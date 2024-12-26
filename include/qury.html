@@ -1,0 +1,19 @@
+
+<!-- $query = $pdo->prepare("SELECT software_house.soft_id, software_house.name, software_house.startdate , software_house.email, software_house.phone, software_house.address, software_house.city, project.title , project.description, user.name AS user_name FROM software_house LEFT JOIN project ON project.soft_id = software_house.soft_id LEFT JOIN user ON user.soft_id = software_house.soft_id WHERE software_house.soft_id = $soft_id");
+$query->execute([':soft_id'=>$soft_id]);
+$result=$query->fetch(PDO::FETCH_ASSOC);
+print_r($result); -->
+
+
+$query = $pdo->prepare("
+    SELECT p.*, u.*
+    FROM projects p
+    JOIN users u ON p.soft_id = u.soft_id
+    WHERE p.soft_id = :soft_id
+");
+$query->execute([
+    ':soft_id' => $soft_id,
+]);
+$results = $query->fetchAll(PDO::FETCH_ASSOC);
+SELECT categories.c_cid, categories.c_name, COUNT(artical.a_id) as article_count FROM jun_art_cat LEFT JOIN artical ON artical.a_id = jun_art_cat.a_id LEFT JOIN categories ON categories.c_cid = jun_art_cat.c_id GROUP BY categories.c_cid, categories.c_name
+max-w-[767px] md:max-w-[1024px] xl:max-w-[1700px]

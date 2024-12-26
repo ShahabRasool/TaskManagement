@@ -1,0 +1,116 @@
+<!-- <div class="mb-4">
+    <label for="soft_id" class="block text-gray-700">Company</label>
+    <select id="soft_id" name="soft_id" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">Please select the company</option>
+        <?php foreach ($company as $comp): ?>
+            <option value="<?php echo $comp['soft_id']; ?>"><?php echo $comp['name']; ?></option>
+        <?php endforeach; ?>
+    </select>
+</div> -->
+
+
+if ($result) {
+    foreach ($result as $company) {
+        $company_name = $company['company_name'];
+        ?>
+        <a href="admin.php?page=drupak&<?php echo ($soft); ?>" class="block px-4 py-2 hover:bg-gray-700">Company
+            <?php echo ($company_name); ?> 
+        </a>
+        <?php
+    } // End foreach loop
+
+
+    
+} 
+
+
+
+try {
+    $query = $pdo->prepare("SELECT soft_id, company_name FROM software_house WHERE soft_id = :soft_id");
+    $params = [
+        ':soft_id' => $soft,
+    ];
+    $query->execute($params);
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    // Debugging output
+    echo '<pre>';
+    print_r($result);
+    echo '</pre>';
+
+} catch (PDOException $e) {
+    echo 'Query failed: ' . $e->getMessage();
+}
+
+
+<?php
+$comp = $_GET['project_id']; // or soft_id, based on your actual structure
+
+// Fetch the count of tasks grouped by status
+$statusQuery = $pdo->prepare("SELECT status, COUNT(*) AS total_tasks FROM task WHERE p_id = :project_id GROUP BY status");
+$statusQuery->execute([
+    ':project_id' => $comp // Make sure you're using the right ID
+]);
+$taskStatusCounts = $statusQuery->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
+<div>
+    <h2>Task Status Summary</h2>
+    <div class="flex flex-col gap-4">
+        <?php 
+        // Initialize counts for todo, progress, and complete
+        $todoCount = ;
+        $progressCount = 0;
+        $completeCount = 0;
+
+        // Loop through the results to display and assign counts
+        foreach ($taskStatusCounts as $status) {
+            if ($status['status'] == 'todo') {
+                $todoCount = $status['total_tasks'];
+            } elseif ($status['status'] == 'progress') {
+                $progressCount = $status['total_tasks'];
+            } elseif ($status['status'] == 'complete') {
+                $completeCount = $status['total_tasks'];
+            }
+        }
+        ?>
+<div class="task-status">
+    <h3>Task Status Overview</h3>
+    
+    <!-- To Do Tasks -->
+    <div class="task-range">
+        <label for="todoRange">To Do: <?php echo $todoCount; ?></label>
+        <input type="range" id="todoRange" name="todoRange" min="0" max="<?php echo $todoCount; ?>" value="<?php echo $todoCount; ?>">
+    </div>
+    
+    <!-- In Progress Tasks -->
+    <div class="task-range">
+        <label for="progressRange">In Progress: <?php echo $progressCount; ?></label>
+        <input type="range" id="progressRange" name="progressRange" min="0" max="<?php echo $progressCount; ?>" value="<?php echo $progressCount; ?>">
+    </div>
+    
+    <!-- Completed Tasks -->
+    <div class="task-range">
+        <label for="completeRange">Completed: <?php echo $completeCount; ?></label>
+        <input type="range" id="completeRange" name="completeRange" min="0" max="<?php echo $completeCount; ?>" value="<?php echo $completeCount; ?>">
+    </div>
+</div>
+
+from yahobaba video;
+
+<?php 
+if(isset($_FILES['image'])){
+ $file_name= $_FILES['image']['name'];
+ $file_tmp = $_FILES['image']['tmp_name'];
+ $file_type = $_FILES['image']['type'];
+ $file_size = $_FILES['image']['size'];
+
+ if(move_uploaded_file($file_tmp, "upload-image/".$file_name)){
+    echo "Image uploaded successfully";
+    echo '<img src="' . './upload-image/' . $file_name . '">';
+ }else{
+    echo "image could not upload";
+ }
+}
+?>
